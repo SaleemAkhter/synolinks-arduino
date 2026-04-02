@@ -1,0 +1,51 @@
+#######################################
+# Syntax Coloring Map For SynoLinks
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+SynoLinks	KEYWORD1
+SynoLinksParam	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+begin	KEYWORD2
+run	KEYWORD2
+connected	KEYWORD2
+virtualWrite	KEYWORD2
+virtualWriteInt	KEYWORD2
+virtualWriteFloat	KEYWORD2
+virtualWriteString	KEYWORD2
+virtualWriteBatch	KEYWORD2
+syncVirtualPin	KEYWORD2
+setProperty	KEYWORD2
+sendStatus	KEYWORD2
+enableOTA	KEYWORD2
+terminal	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+SYNOLINKS_VERSION	LITERAL1
+SYNOLINKS_DEFAULT_PORT	LITERAL1
+V0	LITERAL1
+V1	LITERAL1
+V2	LITERAL1
+V3	LITERAL1
+V4	LITERAL1
+V5	LITERAL1
+V6	LITERAL1
+V7	LITERAL1
+V8	LITERAL1
+V9	LITERAL1
+V10	LITERAL1
+V11	LITERAL1
+V12	LITERAL1
+V13	LITERAL1
+V14	LITERAL1
+V15	LITERAL1
