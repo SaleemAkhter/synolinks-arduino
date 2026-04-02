@@ -17,6 +17,8 @@ SynoLinks::SynoLinks(const char* authToken, const char* orgId,
     _port(port),
     _ssid(nullptr),
     _password(nullptr),
+    _caCert(nullptr),
+    _useTLS(false),
     _mqttClient(_wifiClient),
     _lastReconnectAttempt(0),
     _lastHeartbeat(0),
@@ -28,6 +30,14 @@ SynoLinks::SynoLinks(const char* authToken, const char* orgId,
     memset(_writeHandlers, 0, sizeof(_writeHandlers));
     _handlersInitialized = true;
   }
+}
+
+void SynoLinks::setTLSCert(const char* caCert) {
+#if SYNOLINKS_HAS_TLS
+  _caCert = caCert;
+  _useTLS = true;
+  _port = 8883; // MQTT over TLS default port
+#endif
 }
 
 void SynoLinks::begin(const char* ssid, const char* password) {
@@ -47,6 +57,19 @@ void SynoLinks::begin(const char* ssid, const char* password) {
 
   _buildTopics();
   _connectWiFi();
+
+  // Use TLS client if certificate is set
+#if SYNOLINKS_HAS_TLS
+  if (_useTLS) {
+    if (_caCert) {
+      _wifiClientSecure.setCACert(_caCert);
+    } else {
+      _wifiClientSecure.setInsecure(); // Skip verification (dev only)
+    }
+    _mqttClient.setClient(_wifiClientSecure);
+    Serial.println(F("[SynoLinks] MQTT TLS enabled (port 8883)"));
+  }
+#endif
 
   _mqttClient.setServer(_server, _port);
   _mqttClient.setCallback(_mqttCallback);

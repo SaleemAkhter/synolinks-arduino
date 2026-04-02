@@ -33,16 +33,21 @@
 // Platform-specific includes
 #if defined(ESP32)
   #include <WiFi.h>
+  #include <WiFiClientSecure.h>
   #include <HTTPClient.h>
   #include <Update.h>
   #define SYNOLINKS_HAS_OTA 1
+  #define SYNOLINKS_HAS_TLS 1
 #elif defined(ESP8266)
   #include <ESP8266WiFi.h>
+  #include <WiFiClientSecure.h>
   #include <ESP8266HTTPClient.h>
   #include <ESP8266httpUpdate.h>
   #define SYNOLINKS_HAS_OTA 1
+  #define SYNOLINKS_HAS_TLS 1
 #else
   #define SYNOLINKS_HAS_OTA 0
+  #define SYNOLINKS_HAS_TLS 0
 #endif
 
 #include <PubSubClient.h>
@@ -139,6 +144,13 @@ public:
   void begin(const char* ssid, const char* password);
 
   /**
+   * Set CA certificate for TLS MQTT connection.
+   * Must be called BEFORE begin().
+   * @param caCert  PEM-encoded CA certificate string
+   */
+  void setTLSCert(const char* caCert);
+
+  /**
    * Must be called in loop(). Handles MQTT keepalive, reconnection, and messages.
    */
   void run();
@@ -203,8 +215,13 @@ private:
   uint16_t    _port;
   const char* _ssid;
   const char* _password;
+  const char* _caCert;
+  bool        _useTLS;
 
-  WiFiClient  _wifiClient;
+  WiFiClient       _wifiClient;
+#if SYNOLINKS_HAS_TLS
+  WiFiClientSecure _wifiClientSecure;
+#endif
   PubSubClient _mqttClient;
 
   unsigned long _lastReconnectAttempt;
